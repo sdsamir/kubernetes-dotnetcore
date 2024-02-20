@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using kubernetes.dotnet.presentation.Models;
 using kubernetes.dotnet.domain.Entities;
+using System.Text.Json;
 
 namespace kubernetes.dotnet.presentation.Controllers;
 
@@ -14,21 +15,20 @@ public class HomeController : Controller
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        IEnumerable<User> users =new List<User>()
-        {
-            new User()
-            {
-                Id = 1,
-                FirstName = "Samir",
-                LastName = "Dutta",
-                Description = "This is a test User",
-                CreatedDate = DateTime.UtcNow,
-                EditedDate = null,
-                DeletedDate = null,
-            }
-        };
+        var client = new HttpClient();
+        var request = new HttpRequestMessage();
+        request.RequestUri = new Uri("https://localhost:7254/Users");
+        request.Method = HttpMethod.Get;
+
+        var response = await client.SendAsync(request);
+        var result = await response.Content.ReadAsStringAsync();
+
+        var users = JsonSerializer.Deserialize<User[]>(result, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+
+        //var users = JsonConvert.DeserializeObject<List<clsSalesTran>>(inputString);
+
         return View(users);
     }
 

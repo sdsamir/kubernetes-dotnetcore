@@ -11,5 +11,5 @@ public class Base{
 
     public DateTime? DeletedDate {get; set;}
 
-    public bool IsActive {get; set;} = false;
+    public bool IsActive {get; set;} = true;
 }
