@@ -9,26 +9,27 @@ namespace kubernetes.dotnet.presentation.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    public readonly IConfiguration _configuration;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IConfiguration configuration)
     {
-        _logger = logger;
+        _logger = logger?? throw new ArgumentNullException(nameof(logger));
+        _configuration = configuration?? throw new ArgumentNullException(nameof(configuration));
     }
 
     public async Task<IActionResult> Index()
     {
         var client = new HttpClient();
         var request = new HttpRequestMessage();
-        request.RequestUri = new Uri("https://localhost:7254/Users");
+        var apiBaseUrl = _configuration.GetValue<string>("Api:BaseUrl");
+
+        request.RequestUri = new Uri($"{apiBaseUrl}/Users");
         request.Method = HttpMethod.Get;
 
         var response = await client.SendAsync(request);
         var result = await response.Content.ReadAsStringAsync();
 
         var users = JsonSerializer.Deserialize<User[]>(result, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
-
-        //var users = JsonConvert.DeserializeObject<List<clsSalesTran>>(inputString);
-
         return View(users);
     }
 
