@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/", () => "Welcome to Kubernetes Api Home Page || Running Ok");
 
 app.UseHttpsRedirection();
 
