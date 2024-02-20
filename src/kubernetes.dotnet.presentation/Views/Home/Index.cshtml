@@ -1,8 +1,35 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<kubernetes.dotnet.domain.Entities.User>
+@{
+    ViewData["Title"] = "Home";    
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
+    
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name </th>
+                    <th scope="col">Created</th>
+                    <th scope="col">Is Active</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach(var user in Model)
+                    {
+                        <tr>  
+                            <td>@user.Id</td>  
+                            <td>@user.FirstName @user.LastName</td>  
+                            <td>@user.CreatedDate</td>  
+                            <td>@user.IsActive</td>  
+                        </tr> 
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>

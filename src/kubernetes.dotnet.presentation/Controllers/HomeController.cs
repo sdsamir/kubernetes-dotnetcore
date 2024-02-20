@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using kubernetes.dotnet.presentation.Models;
+using kubernetes.dotnet.domain.Entities;
 
 namespace kubernetes.dotnet.presentation.Controllers;
 
@@ -15,12 +16,20 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
+        IEnumerable<User> users =new List<User>()
+        {
+            new User()
+            {
+                Id = 1,
+                FirstName = "Samir",
+                LastName = "Dutta",
+                Description = "This is a test User",
+                CreatedDate = DateTime.UtcNow,
+                EditedDate = null,
+                DeletedDate = null,
+            }
+        };
+        return View(users);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
